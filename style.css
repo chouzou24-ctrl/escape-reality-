@@ -1544,9 +1544,9 @@ text-shadow:
 
 section{
 
-opacity:0;
+opacity:1 !important;
 
-transform:translateY(70px);
+transform:none !important;
 
 transition:1s ease;
 
