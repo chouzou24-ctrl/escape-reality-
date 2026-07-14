@@ -1,75 +1,208 @@
+/* ==========================================================
+   ESCAPE REALITY - SCRIPT FINAL
+   PARTIE 1
+========================================================== */
+
 document.addEventListener("DOMContentLoaded", () => {
 
-    // ===========================
-    // LOADER
-    // ===========================
+    /* ==========================================
+       ELEMENTS
+    ========================================== */
 
     const loader = document.getElementById("loader");
-
-    setTimeout(() => {
-        if (loader) loader.style.display = "none";
-    }, 2000);
-
-
-    // ===========================
-    // MUSIQUE
-    // ===========================
-
     const music = document.getElementById("music");
 
-    function playMusic() {
-        if (music) {
-            music.play().catch(() => {});
+    const intro = document.getElementById("intro");
+    const welcome = document.getElementById("welcome");
+
+    const enterButton = document.getElementById("enterButton");
+    const continueButton = document.getElementById("continueButton");
+
+    const sections = document.querySelectorAll("section");
+
+
+
+    /* ==========================================
+       LOADER
+    ========================================== */
+
+    setTimeout(() => {
+
+        if(loader){
+
+            loader.style.opacity = "0";
+
+            setTimeout(()=>{
+
+                loader.style.display="none";
+
+            },800);
+
         }
-    }
 
-    document.addEventListener("click", playMusic, { once: true });
+    },1800);
 
 
-    // ===========================
-    // AFFICHER TOUTES LES SECTIONS
-    // ===========================
 
-    document.querySelectorAll("section").forEach(section => {
+    /* ==========================================
+       INTRO
+    ========================================== */
+
+    sections.forEach(section=>{
+
         section.classList.add("show");
+
     });
 
 
-    // ===========================
-    // GALERIE PHOTO
-    // ===========================
 
-    const images = document.querySelectorAll(".photo-card img");
+    /* ==========================================
+       MUSIQUE
+    ========================================== */
 
-    images.forEach(img => {
+    let musicStarted = false;
 
-        img.style.cursor = "pointer";
+    function startMusic(){
 
-        img.addEventListener("click", () => {
+        if(musicStarted) return;
 
-            const overlay = document.createElement("div");
+        musicStarted = true;
 
-            overlay.style.position = "fixed";
-            overlay.style.top = "0";
-            overlay.style.left = "0";
-            overlay.style.width = "100%";
-            overlay.style.height = "100%";
-            overlay.style.background = "rgba(0,0,0,.9)";
-            overlay.style.display = "flex";
-            overlay.style.alignItems = "center";
-            overlay.style.justifyContent = "center";
-            overlay.style.zIndex = "99999";
+        if(music){
 
-            const big = document.createElement("img");
+            music.volume = 0.35;
 
-            big.src = img.src;
-            big.style.maxWidth = "90%";
-            big.style.maxHeight = "90%";
-            big.style.borderRadius = "20px";
+            music.play().catch(()=>{
+
+                console.log("Lecture bloquée jusqu'au clic.");
+
+            });
+
+        }
+
+    }
+
+    document.body.addEventListener("click",startMusic,{once:true});
+
+
+
+    /* ==========================================
+       BOUTON INTRO
+    ========================================== */
+
+    if(enterButton){
+
+        enterButton.addEventListener("click",()=>{
+
+            startMusic();
+
+            intro.scrollIntoView({
+
+                behavior:"smooth"
+
+            });
+
+            setTimeout(()=>{
+
+                welcome.scrollIntoView({
+
+                    behavior:"smooth"
+
+                });
+
+            },700);
+
+        });
+
+    }
+
+
+
+    /* ==========================================
+       BOUTON CONTINUER
+    ========================================== */
+
+    if(continueButton){
+
+        continueButton.addEventListener("click",()=>{
+
+            document.getElementById("gallery").scrollIntoView({
+
+                behavior:"smooth"
+
+            });
+
+        });
+
+    });
+
+
+
+    /* ==========================================
+       REVEAL AU SCROLL
+    ========================================== */
+
+    const observer = new IntersectionObserver(entries=>{
+
+        entries.forEach(entry=>{
+
+            if(entry.isIntersecting){
+
+                entry.target.classList.add("show");
+
+            }
+
+        });
+
+    },{
+
+        threshold:.15
+
+    });
+
+    sections.forEach(section=>observer.observe(section));
+    /* ==========================================
+       GALERIE PHOTO
+    ========================================== */
+
+    const galleryImages = document.querySelectorAll(".photo-card img");
+
+    galleryImages.forEach(image=>{
+
+        image.style.cursor="pointer";
+
+        image.addEventListener("click",()=>{
+
+            const overlay=document.createElement("div");
+
+            overlay.style.position="fixed";
+            overlay.style.top="0";
+            overlay.style.left="0";
+            overlay.style.width="100%";
+            overlay.style.height="100%";
+            overlay.style.background="rgba(0,0,0,.95)";
+            overlay.style.display="flex";
+            overlay.style.alignItems="center";
+            overlay.style.justifyContent="center";
+            overlay.style.zIndex="999999";
+            overlay.style.cursor="zoom-out";
+
+            const big=document.createElement("img");
+
+            big.src=image.src;
+            big.style.maxWidth="90%";
+            big.style.maxHeight="90%";
+            big.style.borderRadius="20px";
+            big.style.boxShadow="0 0 40px rgba(255,255,255,.3)";
+            big.style.animation="fadeIn .3s";
 
             overlay.appendChild(big);
 
-            overlay.addEventListener("click", () => overlay.remove());
+            overlay.addEventListener("click",()=>{
+
+                overlay.remove();
+
+            });
 
             document.body.appendChild(overlay);
 
@@ -78,13 +211,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    // ===========================
-    // CARTES
-    // ===========================
 
-    document.querySelectorAll(".memory-card").forEach(card => {
+    /* ==========================================
+       CARTES QUI SE RETOURNENT
+    ========================================== */
 
-        card.addEventListener("click", () => {
+    const memoryCards=document.querySelectorAll(".memory-card");
+
+    memoryCards.forEach(card=>{
+
+        card.addEventListener("click",()=>{
 
             card.classList.toggle("flip");
 
@@ -93,38 +229,124 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    // ===========================
-    // JEU DU LAPIN
-    // ===========================
+
+    /* ==========================================
+       HAPPINESS JAR
+    ========================================== */
+
+    const jar=document.getElementById("jar");
+    const jarMessage=document.getElementById("jarMessage");
+
+    const messages=[
+
+        "Siempre estaré contigo. ❤️",
+
+        "Estoy orgullosa de ti.",
+
+        "Respira. Todo pasará.",
+
+        "Eres mucho más fuerte de lo que crees.",
+
+        "Nunca estarás sola.",
+
+        "Mi conejita preciosa. 🐇",
+
+        "Te amo muchísimo.",
+
+        "Todavía nos quedan miles de recuerdos por crear.",
+
+        "Gracias por existir.",
+
+        "Siempre serás mi lugar seguro.",
+
+        "Eres mi persona favorita.",
+
+        "Un día todo esto será solo un recuerdo lejano.",
+
+        "Te abrazaría ahora mismo si pudiera.",
+
+        "Estoy aquí. Siempre."
+
+    ];
+
+    if(jar && jarMessage){
+
+        jar.addEventListener("click",()=>{
+
+            const random=Math.floor(Math.random()*messages.length);
+
+            jarMessage.style.opacity="0";
+
+            setTimeout(()=>{
+
+                jarMessage.innerHTML=messages[random];
+
+                jarMessage.style.opacity="1";
+
+            },200);
+
+        });
+
+    }
+    /* ==========================================
+       FIND THE BUNNY
+    ========================================== */
 
     const startGame = document.getElementById("startGame");
     const gameArea = document.getElementById("gameArea");
 
-    if (startGame && gameArea) {
+    if(startGame && gameArea){
 
-        startGame.addEventListener("click", () => {
+        startGame.addEventListener("click",()=>{
 
-            gameArea.innerHTML = "";
+            gameArea.innerHTML="";
 
-            const bunny = document.createElement("div");
+            gameArea.style.position="relative";
+            gameArea.style.height="350px";
 
-            bunny.innerHTML = "🐇";
+            for(let i=0;i<25;i++){
 
-            bunny.style.position = "absolute";
-            bunny.style.fontSize = "40px";
-            bunny.style.cursor = "pointer";
+                const star=document.createElement("div");
 
-            bunny.style.left = Math.random() * 80 + "%";
-            bunny.style.top = Math.random() * 80 + "%";
+                star.innerHTML="⭐";
 
-            bunny.onclick = () => {
+                star.style.position="absolute";
+                star.style.left=Math.random()*95+"%";
+                star.style.top=Math.random()*90+"%";
+                star.style.fontSize="22px";
 
-                alert("¡¡Me encontraste!! ❤️");
+                gameArea.appendChild(star);
 
-            };
+            }
 
-            gameArea.style.position = "relative";
-            gameArea.style.height = "250px";
+            const bunny=document.createElement("div");
+
+            bunny.innerHTML="🐇";
+
+            bunny.style.position="absolute";
+            bunny.style.left=Math.random()*90+"%";
+            bunny.style.top=Math.random()*85+"%";
+            bunny.style.fontSize="40px";
+            bunny.style.cursor="pointer";
+            bunny.style.transition=".3s";
+
+            bunny.addEventListener("mouseenter",()=>{
+
+                bunny.style.transform="scale(1.3)";
+
+            });
+
+            bunny.addEventListener("mouseleave",()=>{
+
+                bunny.style.transform="scale(1)";
+
+            });
+
+            bunny.addEventListener("click",()=>{
+
+                alert("🐇 ¡Me encontraste! Sabía que siempre vendrías por mí. ❤️");
+
+            });
 
             gameArea.appendChild(bunny);
 
@@ -133,59 +355,199 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ===========================
-    // JAR
-    // ===========================
 
-    const jar = document.getElementById("jar");
-    const jarMessage = document.getElementById("jarMessage");
+    /* ==========================================
+       BOTÓN ABRAZO
+    ========================================== */
 
-    const messages = [
+    const hugButton=document.getElementById("hugButton");
 
-        "Siempre estaré contigo. ❤️",
+    if(hugButton){
 
-        "Estoy orgullosa de ti.",
+        hugButton.addEventListener("click",()=>{
 
-        "Respira... mañana será un día nuevo y mejor.",
+            const hugs=[
 
-        "Eres suficiente.",
+                "🫂 Abrazo enviado desde Argelia hasta Florida ❤️",
 
-        "Nunca estarás sola.",
+                "🐇 Ven aquí... déjame abrazarte un ratito.",
 
-        "Te amo muchísimo.",
+                "❤️ Si pudiera, nunca te soltaría.",
 
-        "Mi bella hermosa, adorable. 🐇",
+                "🌎 Aunque haya un océano entre nosotras, mi abrazo siempre llega.",
 
-        "Todavía nos quedan miles de recuerdos."
+                "🤍 Estoy contigo, incluso en los días más difíciles."
 
-    ];
+            ];
 
-    if (jar && jarMessage) {
-
-        jar.addEventListener("click", () => {
-
-            jarMessage.innerHTML =
-                messages[Math.floor(Math.random() * messages.length)];
+            alert(hugs[Math.floor(Math.random()*hugs.length)]);
 
         });
 
     }
 
 
-    // ===========================
-    // BOTÓN FINAL
-    // ===========================
 
-    const hugButton = document.getElementById("hugButton");
+    /* ==========================================
+       EFECTO ESTRELLAS
+    ========================================== */
 
-    if (hugButton) {
+    const stars=document.getElementById("stars");
 
-        hugButton.addEventListener("click", () => {
+    if(stars){
 
-            alert("🫂 Un abrazo enorme desde Argelia hasta Florida. Te amo. ❤️");
+        for(let i=0;i<120;i++){
 
-        });
+            const star=document.createElement("div");
+
+            star.className="star";
+
+            star.style.position="absolute";
+            star.style.left=Math.random()*100+"%";
+            star.style.top=Math.random()*100+"%";
+            star.style.width=(Math.random()*3+1)+"px";
+            star.style.height=star.style.width;
+            star.style.borderRadius="50%";
+            star.style.background="white";
+            star.style.opacity=Math.random();
+
+            stars.appendChild(star);
+
+        }
 
     }
 
-});
+
+
+    /* ==========================================
+       SCROLL SUAVE
+    ========================================== */
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+
+        anchor.addEventListener("click",function(e){
+
+            e.preventDefault();
+
+            const target=document.querySelector(this.getAttribute("href"));
+
+            if(target){
+
+                target.scrollIntoView({
+
+                    behavior:"smooth"
+
+                });
+
+            }
+
+        });
+
+    });
+    /* ==========================================
+       MESSAGE FINAL
+    ========================================== */
+
+    console.log("❤️ Escape Reality chargé avec succès ❤️");
+
+
+
+    /* ==========================================
+       PETITES ANIMATIONS
+    ========================================== */
+
+    document.querySelectorAll("button").forEach(button=>{
+
+        button.addEventListener("mouseenter",()=>{
+
+            button.style.transform="scale(1.05)";
+
+        });
+
+        button.addEventListener("mouseleave",()=>{
+
+            button.style.transform="scale(1)";
+
+        });
+
+    });
+
+
+
+    /* ==========================================
+       EFFET SUR LES VIDEOS
+    ========================================== */
+
+    document.querySelectorAll("video").forEach(video=>{
+
+        video.addEventListener("play",()=>{
+
+            video.style.boxShadow="0 0 35px rgba(255,255,255,.45)";
+
+        });
+
+        video.addEventListener("pause",()=>{
+
+            video.style.boxShadow="";
+
+        });
+
+        video.addEventListener("ended",()=>{
+
+            video.style.boxShadow="";
+
+        });
+
+    });
+
+
+
+    /* ==========================================
+       VERIFICATION DES IMAGES
+    ========================================== */
+
+    document.querySelectorAll("img").forEach(img=>{
+
+        img.onerror=()=>{
+
+            console.warn("Image introuvable :",img.src);
+
+        };
+
+    });
+
+
+
+    /* ==========================================
+       VERIFICATION DES VIDEOS
+    ========================================== */
+
+    document.querySelectorAll("video").forEach(video=>{
+
+        video.onerror=()=>{
+
+            console.warn("Vidéo introuvable.");
+
+        };
+
+    });
+
+
+
+    /* ==========================================
+       VERIFICATION DE LA MUSIQUE
+    ========================================== */
+
+    if(music){
+
+        music.onerror=()=>{
+
+            console.warn("Musique introuvable.");
+
+        };
+
+    }
+
+
+
+}); // ← NE SUPPRIME PAS CETTE LIGNE
