@@ -1,584 +1,191 @@
-/* ====================================== */
-/* ELEMENTS */
-/* ====================================== */
+document.addEventListener("DOMContentLoaded", () => {
 
-const music = document.getElementById("music");
-const enterButton = document.getElementById("enterButton");
-const continueButton = document.getElementById("continueButton");
-const hugButton = document.getElementById("hugButton");
+    // ===========================
+    // LOADER
+    // ===========================
 
-const sections = document.querySelectorAll("section");
+    const loader = document.getElementById("loader");
 
+    setTimeout(() => {
+        if (loader) loader.style.display = "none";
+    }, 2000);
 
 
-/* ====================================== */
-/* INTRO */
-/* ====================================== */
+    // ===========================
+    // MUSIQUE
+    // ===========================
 
-enterButton.addEventListener("click",()=>{
+    const music = document.getElementById("music");
 
-document.getElementById("welcome").scrollIntoView({
+    function playMusic() {
+        if (music) {
+            music.play().catch(() => {});
+        }
+    }
 
-behavior:"smooth"
+    document.addEventListener("click", playMusic, { once: true });
 
-});
 
-});
+    // ===========================
+    // AFFICHER TOUTES LES SECTIONS
+    // ===========================
 
+    document.querySelectorAll("section").forEach(section => {
+        section.classList.add("show");
+    });
 
 
-continueButton.addEventListener("click",()=>{
+    // ===========================
+    // GALERIE PHOTO
+    // ===========================
 
-document.getElementById("gallery").scrollIntoView({
+    const images = document.querySelectorAll(".photo-card img");
 
-behavior:"smooth"
+    images.forEach(img => {
 
-});
+        img.style.cursor = "pointer";
 
-});
+        img.addEventListener("click", () => {
 
+            const overlay = document.createElement("div");
 
+            overlay.style.position = "fixed";
+            overlay.style.top = "0";
+            overlay.style.left = "0";
+            overlay.style.width = "100%";
+            overlay.style.height = "100%";
+            overlay.style.background = "rgba(0,0,0,.9)";
+            overlay.style.display = "flex";
+            overlay.style.alignItems = "center";
+            overlay.style.justifyContent = "center";
+            overlay.style.zIndex = "99999";
 
-/* ====================================== */
-/* MUSIC */
-/* ====================================== */
+            const big = document.createElement("img");
 
-let musicStarted=false;
+            big.src = img.src;
+            big.style.maxWidth = "90%";
+            big.style.maxHeight = "90%";
+            big.style.borderRadius = "20px";
 
-enterButton.addEventListener("click",()=>{
+            overlay.appendChild(big);
 
-if(!musicStarted){
+            overlay.addEventListener("click", () => overlay.remove());
 
-music.volume=0;
+            document.body.appendChild(overlay);
 
-music.play();
+        });
 
-musicStarted=true;
+    });
 
-let volume=0;
 
-const fade=setInterval(()=>{
+    // ===========================
+    // CARTES
+    // ===========================
 
-volume+=0.02;
+    document.querySelectorAll(".memory-card").forEach(card => {
 
-music.volume=Math.min(volume,1);
+        card.addEventListener("click", () => {
 
-if(volume>=1){
+            card.classList.toggle("flip");
 
-clearInterval(fade);
+        });
 
-}
+    });
 
-},120);
 
-}
+    // ===========================
+    // JEU DU LAPIN
+    // ===========================
 
-});
+    const startGame = document.getElementById("startGame");
+    const gameArea = document.getElementById("gameArea");
 
+    if (startGame && gameArea) {
 
+        startGame.addEventListener("click", () => {
 
-/* ====================================== */
-/* SCROLL ANIMATION */
-/* ====================================== */
+            gameArea.innerHTML = "";
 
-const observer=new IntersectionObserver(entries=>{
+            const bunny = document.createElement("div");
 
-entries.forEach(entry=>{
+            bunny.innerHTML = "🐇";
 
-if(entry.isIntersecting){
+            bunny.style.position = "absolute";
+            bunny.style.fontSize = "40px";
+            bunny.style.cursor = "pointer";
 
-entry.target.classList.add("show");
+            bunny.style.left = Math.random() * 80 + "%";
+            bunny.style.top = Math.random() * 80 + "%";
 
-}
+            bunny.onclick = () => {
 
-});
+                alert("¡¡Me encontraste!! ❤️");
 
-},{
+            };
 
-threshold:.2
+            gameArea.style.position = "relative";
+            gameArea.style.height = "250px";
 
-});
+            gameArea.appendChild(bunny);
 
-sections.forEach(section=>{
+        });
 
-observer.observe(section);
+    }
 
-});
 
+    // ===========================
+    // JAR
+    // ===========================
 
+    const jar = document.getElementById("jar");
+    const jarMessage = document.getElementById("jarMessage");
 
-/* ====================================== */
-/* PHOTO LIGHTBOX */
-/* ====================================== */
+    const messages = [
 
-const images=document.querySelectorAll(".photo-card img");
+        "Siempre estaré contigo. ❤️",
 
-const lightbox=document.createElement("div");
+        "Estoy orgullosa de ti.",
 
-lightbox.className="lightbox";
+        "Respira... mañana será un día nuevo y mejor.",
 
-lightbox.innerHTML=`
+        "Eres suficiente.",
 
-<span class="close-lightbox">&times;</span>
+        "Nunca estarás sola.",
 
-<img>
+        "Te amo muchísimo.",
 
-`;
+        "Mi bella hermosa, adorable. 🐇",
 
-document.body.appendChild(lightbox);
+        "Todavía nos quedan miles de recuerdos."
 
-const lightboxImage=lightbox.querySelector("img");
+    ];
 
-images.forEach(image=>{
+    if (jar && jarMessage) {
 
-image.addEventListener("click",()=>{
+        jar.addEventListener("click", () => {
 
-lightbox.classList.add("active");
+            jarMessage.innerHTML =
+                messages[Math.floor(Math.random() * messages.length)];
 
-lightboxImage.src=image.src;
+        });
 
-});
+    }
 
-});
 
-lightbox.addEventListener("click",()=>{
+    // ===========================
+    // BOTÓN FINAL
+    // ===========================
 
-lightbox.classList.remove("active");
+    const hugButton = document.getElementById("hugButton");
 
-});
+    if (hugButton) {
 
+        hugButton.addEventListener("click", () => {
 
+            alert("🫂 Un abrazo enorme desde Argelia hasta Florida. Te amo. ❤️");
 
-/* ====================================== */
-/* HUG BUTTON */
-/* ====================================== */
+        });
 
-hugButton.addEventListener("click",()=>{
-
-alert("🫂 Si pudiera... ahora mismo te estaría abrazando muy fuerte.\n\nTe amo muchísimo, mi conejita. ❤️");
-
-});
-
-/* ====================================== */
-/* HAPPINESS JAR */
-/* ====================================== */
-
-const jar=document.getElementById("jar");
-
-const jarMessage=document.getElementById("jarMessage");
-
-const messages=[
-
-"Estoy muy orgullosa de ti. 🤍",
-
-"Gracias por seguir aquí.",
-
-"Respira... todo va a estar bien.",
-
-"Te amo muchísimo.",
-
-"Eres mucho más fuerte de lo que crees.",
-
-"Siempre tendrás un hogar en mi corazón.",
-
-"Mi conejita favorita. 🐇",
-
-"Hoy también elegí amarte.",
-
-"No estás sola.",
-
-"Estoy contigo.",
-
-"Descansa un poquito.",
-
-"Estoy sonriendo mientras escribo esto.",
-
-"Gracias por existir.",
-
-"Lo estás haciendo muy bien.",
-
-"Tu sonrisa sigue siendo mi lugar favorito.",
-
-"Espero abrazarte muy pronto.",
-
-"Estoy contando los días para verte.",
-
-"Qué orgullosa estoy de ti.",
-
-"Siempre voy a creer en ti.",
-
-"Nunca olvides cuánto te amo.",
-
-"Un día todo esto será solo un recuerdo.",
-
-"Prometo seguir haciéndote sonreír.",
-
-"Eres mi persona favorita.",
-
-"Mi lugar favorito siempre serás tú.",
-
-"Te elegiría una y otra vez.",
-
-"Estoy aquí.",
-
-"Todo irá bien.",
-
-"Te mando un abrazo enorme.",
-
-"Gracias por hacerme tan feliz.",
-
-"Siempre serás mi conejita."
-
-];
-
-jar.addEventListener("click",()=>{
-
-const random=Math.floor(Math.random()*messages.length);
-
-jarMessage.textContent=messages[random];
-
-});
-
-
-
-/* ====================================== */
-/* BUNNY GAME */
-/* ====================================== */
-
-const gameArea=document.getElementById("gameArea");
-
-const bunnyMessages=[
-
-"🐇 ¡Me encontraste!",
-
-"Siempre encuentras el camino hacia mí. ❤️",
-
-"Sabía que vendrías.",
-
-"Premio: un abrazo gigante. 🤍",
-
-"Mi conejita ganó. 🐇"
-
-];
-
-const startGame=document.getElementById("startGame");
-
-startGame.addEventListener("click",()=>{
-
-gameArea.innerHTML="";
-
-const bunny=Math.floor(Math.random()*12);
-
-for(let i=0;i<12;i++){
-
-const star=document.createElement("div");
-
-star.className="star-box";
-
-star.textContent="⭐";
-
-star.onclick=()=>{
-
-if(i===bunny){
-
-star.textContent="🐇";
-
-setTimeout(()=>{
-
-alert(bunnyMessages[Math.floor(Math.random()*bunnyMessages.length)]);
-
-},200);
-
-}else{
-
-star.textContent="✨";
-
-}
-
-};
-
-gameArea.appendChild(star);
-
-}
-
-});
-
-
-
-/* ====================================== */
-/* LAST MESSAGE */
-/* ====================================== */
-
-const cards=document.querySelectorAll(".memory-card");
-
-const believe=document.getElementById("believe");
-
-cards[cards.length-1].addEventListener("click",()=>{
-
-setTimeout(()=>{
-
-believe.scrollIntoView({
-
-behavior:"smooth"
-
-});
-
-},1800);
-
-});
-
-
-
-/* ====================================== */
-/* SMALL HEARTS */
-/* ====================================== */
-
-document.addEventListener("click",(e)=>{
-
-const heart=document.createElement("div");
-
-heart.innerHTML="❤️";
-
-heart.style.position="fixed";
-
-heart.style.left=e.clientX+"px";
-
-heart.style.top=e.clientY+"px";
-
-heart.style.pointerEvents="none";
-
-heart.style.fontSize="20px";
-
-heart.style.zIndex="99999";
-
-heart.style.transition="1s";
-
-document.body.appendChild(heart);
-
-setTimeout(()=>{
-
-heart.style.transform="translateY(-80px)";
-
-heart.style.opacity="0";
-
-},50);
-
-setTimeout(()=>{
-
-heart.remove();
-
-},1000);
-
-});
-
-/* ====================================== */
-/* HAPPINESS JAR */
-/* ====================================== */
-
-const jar=document.getElementById("jar");
-
-const jarMessage=document.getElementById("jarMessage");
-
-const messages=[
-
-"Estoy muy orgullosa de ti. 🤍",
-
-"Gracias por seguir aquí.",
-
-"Respira... todo va a estar bien.",
-
-"Te amo mucho.",
-
-"Eres mucho más fuerte de lo que crees.",
-
-"Siempre tendrás un hogar en mi corazón.",
-
-"Mi conejito favorito. 🐇",
-
-"Hoy también elegí amarte.",
-
-"No estás sola.",
-
-"Estoy contigo.",
-
-"Descansa un poquito.",
-
-"Estoy sonriendo mientras escribo esto.",
-
-"Gracias por existir.",
-
-"Lo estás haciendo muy bien.",
-
-"Tu sonrisa sigue la mas preciosa del mundo.",
-
-"Espero abrazarte muy pronto.",
-
-"Estoy contando los días para verte.",
-
-"Qué orgullosa estoy de ti.",
-
-"Siempre voy a creer en ti.",
-
-"Nunca olvides cuánto te amo.",
-
-"Un día todo esto será solo un recuerdo.",
-
-"Prometo seguir haciéndote sonreír.",
-
-"Eres mia, mi persona favorita.",
-
-"dejame creer en nosotros.",
-
-"Te elegiría una y otra vez.",
-
-"Estoy aquí.",
-
-"Todo irá bien.",
-
-"Te mando un abrazo enorme.",
-
-"respira mi amor todo es temporary.",
-
-"Siempre serás mi precioso bebé."
-
-];
-
-jar.addEventListener("click",()=>{
-
-const random=Math.floor(Math.random()*messages.length);
-
-jarMessage.textContent=messages[random];
-
-});
-
-
-
-/* ====================================== */
-/* BUNNY GAME */
-/* ====================================== */
-
-const gameArea=document.getElementById("gameArea");
-
-const bunnyMessages=[
-
-"🐇 ¡Me encontraste!",
-
-"Siempre encuentras el camino hacia mí. ❤️",
-
-"Sabía que vendrías.",
-
-"Premio: un abrazo gigante. 🤍",
-
-"conejito ganó. 🐇"
-
-];
-
-const startGame=document.getElementById("startGame");
-
-startGame.addEventListener("click",()=>{
-
-gameArea.innerHTML="";
-
-const bunny=Math.floor(Math.random()*12);
-
-for(let i=0;i<12;i++){
-
-const star=document.createElement("div");
-
-star.className="star-box";
-
-star.textContent="⭐";
-
-star.onclick=()=>{
-
-if(i===bunny){
-
-star.textContent="🐇";
-
-setTimeout(()=>{
-
-alert(bunnyMessages[Math.floor(Math.random()*bunnyMessages.length)]);
-
-},200);
-
-}else{
-
-star.textContent="✨";
-
-}
-
-};
-
-gameArea.appendChild(star);
-
-}
-
-});
-
-
-
-/* ====================================== */
-/* LAST MESSAGE */
-/* ====================================== */
-
-const cards=document.querySelectorAll(".memory-card");
-
-const believe=document.getElementById("believe");
-
-cards[cards.length-1].addEventListener("click",()=>{
-
-setTimeout(()=>{
-
-believe.scrollIntoView({
-
-behavior:"smooth"
-
-});
-
-},1800);
-
-});
-
-
-
-/* ====================================== */
-/* SMALL HEARTS */
-/* ====================================== */
-
-document.addEventListener("click",(e)=>{
-
-const heart=document.createElement("div");
-
-heart.innerHTML="❤️";
-
-heart.style.position="fixed";
-
-heart.style.left=e.clientX+"px";
-
-heart.style.top=e.clientY+"px";
-
-heart.style.pointerEvents="none";
-
-heart.style.fontSize="20px";
-
-heart.style.zIndex="99999";
-
-heart.style.transition="1s";
-
-document.body.appendChild(heart);
-
-setTimeout(()=>{
-
-heart.style.transform="translateY(-80px)";
-
-heart.style.opacity="0";
-
-},50);
-
-setTimeout(()=>{
-
-heart.remove();
-
-},1000);
+    }
 
 });
