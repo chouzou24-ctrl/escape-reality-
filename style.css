@@ -1753,3 +1753,23 @@ rgba(0,0,0,.35)
 
 
 /* FIN ❤️ */
+
+
+.memory-card{
+    transform-style: preserve-3d;
+    transition: .8s;
+    cursor: pointer;
+}
+
+.memory-card.flip{
+    transform: rotateY(180deg);
+}
+
+.memory-card .front,
+.memory-card .back{
+    backface-visibility: hidden;
+}
+
+.memory-card .back{
+    transform: rotateY(180deg);
+}
