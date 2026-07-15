@@ -810,10 +810,8 @@ transition:transform .8s;
 
 
 
-.memory-card:hover{
-
-transform:rotateY(180deg);
-
+.memory-card.flip{
+    transform:rotateY(180deg);
 }
 
 
