@@ -243,21 +243,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
         "Estoy orgullosa de ti.",
 
-        "Respira. Todo pasará.",
+        "Respira profundamente amor. Todo pasará.",
 
         "Eres mucho más fuerte de lo que crees.",
 
         "Nunca estarás sola.",
 
-        "Mi conejita preciosa. 🐇",
+        "Mi preciosa princesa. ",
 
-        "Te amo muchísimo.",
+        "Te amo ❤️ .",
 
         "Todavía nos quedan miles de recuerdos por crear.",
 
         "Gracias por existir.",
 
-        "Siempre serás mi lugar seguro.",
+        "Si me quieres, siempre estaré tu lugar seguro.",
 
         "Eres mi persona favorita.",
 
@@ -265,7 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         "Te abrazaría ahora mismo si pudiera.",
 
-        "Estoy aquí. Siempre."
+        "Sonríe, todo estará bien."
 
     ];
 
@@ -284,71 +284,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 jarMessage.style.opacity="1";
 
             },200);
-
-        });
-
-    }
-    /* ==========================================
-       FIND THE BUNNY
-    ========================================== */
-
-    const startGame = document.getElementById("startGame");
-    const gameArea = document.getElementById("gameArea");
-
-    if(startGame && gameArea){
-
-        startGame.addEventListener("click",()=>{
-
-            gameArea.innerHTML="";
-
-            gameArea.style.position="relative";
-            gameArea.style.height="350px";
-
-            for(let i=0;i<25;i++){
-
-                const star=document.createElement("div");
-
-                star.innerHTML="⭐";
-
-                star.style.position="absolute";
-                star.style.left=Math.random()*95+"%";
-                star.style.top=Math.random()*90+"%";
-                star.style.fontSize="22px";
-
-                gameArea.appendChild(star);
-
-            }
-
-            const bunny=document.createElement("div");
-
-            bunny.innerHTML="🐇";
-
-            bunny.style.position="absolute";
-            bunny.style.left=Math.random()*90+"%";
-            bunny.style.top=Math.random()*85+"%";
-            bunny.style.fontSize="40px";
-            bunny.style.cursor="pointer";
-            bunny.style.transition=".3s";
-
-            bunny.addEventListener("mouseenter",()=>{
-
-                bunny.style.transform="scale(1.3)";
-
-            });
-
-            bunny.addEventListener("mouseleave",()=>{
-
-                bunny.style.transform="scale(1)";
-
-            });
-
-            bunny.addEventListener("click",()=>{
-
-                alert("🐇 ¡Me encontraste! Sabía que siempre vendrías por mí. ❤️");
-
-            });
-
-            gameArea.appendChild(bunny);
 
         });
 
